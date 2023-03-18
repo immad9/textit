@@ -1,0 +1,184 @@
+.spinner {
+  margin-top: 5px;
+  animation: spinner 0.8s linear infinite;
+}
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.textAmimation {
+  border-right: solid 3px #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  font-family: "Source Code Pro", monospace;
+  font-size: 28px;
+  color: #fff;
+}
+
+/* Animation */
+.textAmimation {
+  animation: animated-text 1.3s steps(10, end) 1s 1 normal both,
+    animated-cursor 600ms steps(10, end) infinite;
+}
+
+/* text animation */
+
+@keyframes animated-text {
+  from {
+    width: 0;
+  }
+  to {
+    width: 140px;
+  }
+}
+
+/* cursor animations */
+
+@keyframes animated-cursor {
+  from {
+    border-right-color: #fff;
+  }
+  to {
+    border-right-color: transparent;
+  }
+}
+/* <-------------Home page header-------------> */
+.headerbg {
+  background-color: #0089ed;
+  padding-bottom: 50px;
+}
+.logoStyling {
+  color: #ffffff;
+  padding-left: 90px;
+  padding-top: 50px;
+  font-size: 25px;
+  line-height: 30px;
+}
+.headerContainer {
+  color: #ffffff;
+  justify-content: center;
+  align-items: center;
+}
+.headerRow {
+  color: #ffffff;
+  align-items: center !important;
+  justify-content: center;
+}
+.headerImage {
+  height: 250px;
+  transform: rotate(-15deg);
+}
+.getStartedBtn {
+  display: flex !important;
+  padding: 0.875em 2em !important;
+  background: linear-gradient(220deg, blue, transparent) #2196f3 !important;
+  color: #fff !important;
+  text-decoration: none !important;
+  transition: background-color 1s !important;
+  place-content: center;
+  border-radius: 30px !important;
+  width: 100%;
+  padding-bottom: 10px !important;
+  font-family: poppins !important;
+  font-weight: 600 !important;
+}
+.getStartedBtn:hover {
+  background-color: #e91e63 !important;
+}
+.modal-content {
+  border-radius: 20px !important;
+  padding: 20px !important;
+}
+.cgClose {
+  font-size: 23px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  padding: 3px;
+  cursor: pointer !important;
+}
+.cgClose:hover {
+  background-color: #0089ed;
+  color: #ffffff;
+  border-radius: 100px;
+}
+.signinBtn {
+  width: 100%;
+  background-color: #0098ed !important;
+  margin: 25px auto;
+  border: 50px;
+  text-align: center;
+}
+.googleIcon {
+  font-size: 20px !important;
+  margin-right: 30px !important;
+}
+.googleLoginBtn {
+  width: 100%;
+  background-color: #e9f1ff !important;
+  margin: 25px auto;
+  border: 50px;
+  text-align: center;
+  color: #0089ed !important;
+}
+
+.welcometotextit {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+.userContact {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 3px;
+}
+@media (max-width: 575px) {
+  .userContact {
+    flex-direction: column;
+  }
+  .googleLoginBtn {
+    width: 95%;
+    margin: 25px auto;
+  }
+  .googleIcon {
+    margin-right: 15px !important;
+  }
+  .welcometo {
+    display: none !important;
+  }
+  .errorForgetPassword {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  .modal-content {
+    border-radius: 0px !important;
+  }
+}
+.pointer {
+  cursor: pointer !important;
+}
+.forgetPassword {
+  color: #0098ed !important;
+}
+.errorForgetPassword {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+.f13 {
+  font-size: 13px !important;
+}
+.sendAgain {
+  width: 100px !important;
+  font-size: 12px !important;
+  background-color: #fff !important;
+  color: #0089ed !important;
+  border: none !important;
+}
+.dropdown-toggle::after {
+  display: none !important;
+}
