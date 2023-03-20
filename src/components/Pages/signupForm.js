@@ -3,6 +3,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, provider, db } from "../../firebase/firebase";
+import ResendVerficationEmail from "./resendVerficationEmail";
 import {
   createUserWithEmailAndPassword,
   updateProfile,
@@ -22,19 +23,18 @@ class SignupForm extends Component {
     loginError: false,
     spinner: "none",
     verificationsuccess: false,
-    sendAgainBtn: true,
-    sendAgain: false,
     users: [],
+    resendBtnDisable: true,
+    onClickHideverifiMsg: true,
   };
 
   render() {
-    // <------------Get data from form and store in firestore auth----------->
+    // <------------Get data from form and store in firestore auth and firebase database----------->
     const handleSignup = (e) => {
       this.setState({
         spinner: "block",
         loginError: false,
         verificationsuccess: false,
-        sendAgain: false,
       });
       e.preventDefault();
       createUserWithEmailAndPassword(
@@ -46,19 +46,10 @@ class SignupForm extends Component {
           const user = userCredential.user;
           updateProfile(auth.currentUser, {
             displayName: this.state.userName.toLowerCase(),
-          }).then(async () => {
-            await setDoc(doc(db, "users", user.uid), {
-              createdAt: new Date(),
-              name: user.displayName,
-              email: user.email,
-              profilePic:
-                "https://firebasestorage.googleapis.com/v0/b/textit-ee21b.appspot.com/o/DefaultProfilPic.png?alt=media&token=135a91ae-3f7f-4b1a-af39-3ddb92c667e2",
-            });
           });
-          this.setState({ users: user });
+
           verificationSend();
         })
-
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
@@ -72,7 +63,15 @@ class SignupForm extends Component {
             contact: "",
             userName: "",
             loginError: errorCode,
-            sendAgain: false,
+          });
+        })
+        .then(async () => {
+          await setDoc(doc(db, "users", auth.currentUser.uid), {
+            createdAt: new Date(),
+            name: this.state.userName,
+            email: this.state.email,
+            profilePic:
+              "https://firebasestorage.googleapis.com/v0/b/textit-ee21b.appspot.com/o/DefaultProfilPic.png?alt=media&token=135a91ae-3f7f-4b1a-af39-3ddb92c667e2",
           });
         });
     };
@@ -80,125 +79,123 @@ class SignupForm extends Component {
     // <---------Send verification msg to email------------>
     const verificationSend = () => {
       this.setState({
-        verificationsuccess: false,
         spinner: "block",
+        resendBtnDisable: true,
+        onClickHideverifiMsg: false,
       });
-
-      sendEmailVerification(auth.currentUser)
+      const actionCodeSettings = {
+        url: "http://localhost:3000/textit",
+        handleCodeInApp: true,
+      };
+      sendEmailVerification(auth.currentUser, actionCodeSettings)
         .then((data) => {
-          SendEmailAgain();
+          this.setState({
+            spinner: "none",
+            verificationsuccess: true,
+            resendBtnDisable: true,
+            onClickHideverifiMsg: true,
+          });
+          let sec = 60;
+          const timer = setInterval(() => {
+            if (sec > 0) {
+              sec--;
+              document.getElementById("timer").innerHTML = sec;
+            } else if (sec == 0) {
+              document.getElementById("timer").innerHTML = "Send again";
+              this.setState({ resendBtnDisable: false });
+              clearInterval(timer);
+            }
+          }, 1000);
         })
         .catch((error) => {
           alert("someError in verifying email");
         });
     };
-    // <-----------Resend verification email -------------->
-    const SendEmailAgain = () => {
-      this.setState({
-        spinner: "none",
-        verificationsuccess: true,
-        sendAgainBtn: true,
-        sendAgain: true,
-      });
-      setTimeout(() => {
-        this.setState({ sendAgainBtn: false });
-      }, 90000);
-    };
-    // <------------------------------------------>
+
     return (
-      <>
-        <Form onSubmit={handleSignup}>
-          <Form.Group className="mb-3 mt-1">
-            <Form.Label className="poppins300">Enter email address</Form.Label>
+      <Form onSubmit={handleSignup}>
+        <Form.Group className="mb-3 mt-1">
+          <Form.Label className="poppins400 formlable">
+            Enter email address
+          </Form.Label>
+          <Form.Control
+            className="formControl"
+            type="email"
+            placeholder="Enter email"
+            value={this.state.email}
+            required
+            onChange={(e) => this.setState({ email: e.target.value })}
+          />
+        </Form.Group>
+
+        <div className="userContact">
+          <Form.Group className="mb-3">
+            <Form.Label className="poppins400 formlable">User name</Form.Label>
             <Form.Control
-              type="email"
-              placeholder="Enter email"
-              value={this.state.email}
+              className="formControl"
+              type="text"
+              placeholder="User name"
               required
-              onChange={(e) => this.setState({ email: e.target.value })}
+              value={this.state.userName}
+              onChange={(e) => this.setState({ userName: e.target.value })}
             />
           </Form.Group>
-
-          <div className="userContact">
-            <Form.Group className="mb-3">
-              <Form.Label className="poppins300">User name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="User name"
-                required
-                value={this.state.userName}
-                onChange={(e) => this.setState({ userName: e.target.value })}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label className="poppins300">Contact Number</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Contact Number"
-                required
-                value={this.state.contact}
-                onChange={(e) => this.setState({ contact: e.target.value })}
-              />
-            </Form.Group>
-          </div>
           <Form.Group className="mb-3">
-            <Form.Label className="poppins300">
-              Password (6 or more character)
+            <Form.Label className="poppins400 formlable">
+              Contact Number
             </Form.Label>
             <Form.Control
-              type="password"
-              placeholder="Password"
-              minLength={6}
+              className="formControl"
+              type="text"
+              placeholder="Contact Number"
               required
-              value={this.state.password}
-              onChange={(e) => this.setState({ password: e.target.value })}
+              value={this.state.contact}
+              onChange={(e) => this.setState({ contact: e.target.value })}
             />
           </Form.Group>
-          <Spinner display={this.state.spinner} />
-          {this.state.loginError == "auth/email-already-in-use" && (
-            <span className="text-danger poopins300">Email already in use</span>
-          )}
-          {this.state.loginError == "auth/invalid-email" && (
-            <span className="text-danger poopins300">Invalid email</span>
-          )}
-          {this.state.verificationsuccess && (
-            <span
-              style={{ float: "left" }}
-              className="text-success poopins300 "
-            >
-              Verification email send successfully.
-            </span>
-          )}
-          {this.state.sendAgain && (
-            <OverlayTrigger
-              style={{ float: "right" }}
-              placement="bottom"
-              overlay={
-                this.state.sendAgainBtn ? (
-                  <Tooltip>Wait for 90 sec</Tooltip>
-                ) : (
-                  <span></span>
-                )
-              }
-            >
-              <span style={{ float: "right" }} className="d-inline-block ">
-                <Button
-                  disabled={this.state.sendAgainBtn}
-                  className=" poppins600 sendAgain"
-                  onClick={() => {
-                    verificationSend();
-                  }}
-                >
-                  Send again
-                </Button>
+        </div>
+        <Form.Group className="mb-3">
+          <Form.Label className="poppins400 formlable">
+            Password (6 or more)
+          </Form.Label>
+          <Form.Control
+            className="formControl"
+            type="password"
+            placeholder="Password"
+            minLength={6}
+            required
+            value={this.state.password}
+            onChange={(e) => this.setState({ password: e.target.value })}
+          />
+        </Form.Group>
+        <Spinner display={this.state.spinner} />
+        {this.state.loginError == "auth/email-already-in-use" && (
+          <span className="text-danger poopins300">Email already in use</span>
+        )}
+        {this.state.loginError == "auth/invalid-email" && (
+          <span className="text-danger poopins300">Invalid email</span>
+        )}
+        {this.state.verificationsuccess && (
+          <div className="welcometotextit">
+            {this.state.onClickHideverifiMsg && (
+              <span className="text-success poopins300 ">
+                Verification email send successfully.
               </span>
-            </OverlayTrigger>
-          )}
-          <Button type="submit" className="signinBtn">
-            <span className="poppins300">Sign up</span>
-          </Button>
-        </Form>
-      </>
+            )}
+
+            <Button
+              disabled={this.state.resendBtnDisable}
+              className="sendAgainBtn poppins300"
+              onClick={verificationSend}
+              id="timer"
+            ></Button>
+          </div>
+        )}
+
+        <Button type="submit" className="signinBtn">
+          <span className="poppins300">Sign up</span>
+        </Button>
+      </Form>
     );
   }
 }

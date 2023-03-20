@@ -48,12 +48,13 @@
 }
 /* <-------------Home page header-------------> */
 .headerbg {
+  height: 50vh;
   background-color: #0089ed;
   padding-bottom: 50px;
 }
 .logoStyling {
   color: #ffffff;
-  padding-left: 90px;
+  padding-left: 80px;
   padding-top: 50px;
   font-size: 25px;
   line-height: 30px;
@@ -63,14 +64,14 @@
   justify-content: center;
   align-items: center;
 }
-.headerRow {
-  color: #ffffff;
-  align-items: center !important;
-  justify-content: center;
+.headerImageCol {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center;
 }
 .headerImage {
-  height: 250px;
-  transform: rotate(-15deg);
+  width: 250px;
+  margin: auto;
 }
 .getStartedBtn {
   display: flex !important;
@@ -131,31 +132,90 @@
   align-items: center !important;
 }
 .userContact {
-  width: 100%;
   display: flex;
   justify-content: space-between;
   gap: 3px;
 }
+.authModal {
+  background-color: #fff;
+  position: absolute;
+  top: 130px;
+  right: 80px;
+  width: 450px;
+  padding: 20px;
+  box-shadow: 0px 4px 35px rgba(0, 0, 0, 0.08);
+  border-radius: 20px;
+}
+@media (max-width: 1200px) {
+  .authModal {
+    top: 120px;
+    right: 30px;
+    width: 390px;
+  }
+}
+@media (max-width: 992px) {
+  .headerImage {
+    display: none !important  ;
+  }
+}
+@media (max-width: 850px) {
+  .authModal {
+    top: 110px;
+    right: 20px;
+    width: 385px;
+  }
+}
+@media (max-width: 677px) {
+  .authModal {
+    top: 100px;
+    right: 10px;
+    width: 350px;
+  }
+}
+@media (max-width: 600px) {
+  .headerUpperText {
+    display: none;
+  }
+  .headerbg {
+    height: 100vh;
+  }
+  .authModal {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    width: 100% !important;
+    height: auto;
+  }
+  .logoStyling {
+    padding-left: 30px;
+    padding-top: 20px;
+    font-size: 20px;
+    line-height: 30px;
+  }
+}
+
 @media (max-width: 575px) {
-  .userContact {
-    flex-direction: column;
-  }
-  .googleLoginBtn {
-    width: 95%;
-    margin: 25px auto;
-  }
   .googleIcon {
     margin-right: 15px !important;
   }
-  .welcometo {
-    display: none !important;
-  }
+
   .errorForgetPassword {
     flex-direction: column !important;
     gap: 10px !important;
   }
   .modal-content {
     border-radius: 0px !important;
+  }
+}
+@media (max-width: 350px) {
+  .welcometo {
+    display: none;
+  }
+  .userContact {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column !important;
+    gap: 3px;
   }
 }
 .pointer {
@@ -172,13 +232,35 @@
 .f13 {
   font-size: 13px !important;
 }
-.sendAgain {
-  width: 100px !important;
-  font-size: 12px !important;
+.sendAgainBtn {
   background-color: #fff !important;
+  font-size: 13px !important;
+  padding: 5px !important;
   color: #0089ed !important;
-  border: none !important;
+  width: 90px !important;
+  text-align: center !important;
+  height: 30px !important;
+  margin-left: auto !important;
 }
 .dropdown-toggle::after {
   display: none !important;
+}
+.formlable {
+  font-size: 16px;
+  line-height: 24px;
+  width: 100%;
+}
+.formControl::placeholder {
+  font-family: poppins;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 21px;
+}
+.haveAnAccount {
+  font-size: 13px;
+  line-height: 19.5px;
+}
+.welcomeToP {
+  font-size: 21px;
+  line-height: 31px;
 }

@@ -1,4 +1,4 @@
-import { Component } from "react";
+import React, { Component } from "react";
 import "../main.css";
 import { Button } from "react-bootstrap";
 import { FcGoogle } from "react-icons/fc";
@@ -36,7 +36,7 @@ class GoogleSignIn extends Component {
         });
     };
     return (
-      <>
+      <React.Fragment>
         <Button
           className="googleLoginBtn"
           onClick={() => {
@@ -52,7 +52,7 @@ class GoogleSignIn extends Component {
             Something is wrong please try again
           </span>
         )}
-      </>
+      </React.Fragment>
     );
   }
 }

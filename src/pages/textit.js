@@ -1,7 +1,14 @@
 import { Component } from "react";
 import Button from "react-bootstrap/Button";
 import "../components/main.css";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import {
+  onAuthStateChanged,
+  signOut,
+  updateProfile,
+  updateCurrentUser,
+  getAuth,
+  sendEmailVerification,
+} from "firebase/auth";
 import { db, auth } from "../firebase/firebase";
 import "../components/main.css";
 import Spinner from "../components/Share/spinner";
@@ -54,8 +61,24 @@ class Textit extends Component {
           console.log("error occured in signout");
         });
     };
+
+    // onAuthStateChanged(auth, (user) => {
+    //   auth
+    //     .updateCurrentUser(uid, {
+    //       emailVerified: true,
+    //     })
+    //     .then((userRecord) => {
+    //       // See the UserRecord reference doc for the contents of userRecord.
+    //       console.log("Successfully updated user", userRecord.toJSON());
+    //     })
+    //     .catch((error) => {
+    //       console.log("Error updating user:", error);
+    //     });
+    // });
+
     return (
       <>
+        {console.log(auth.currentUser)}
         <Spinner display={this.state.spinner} />
         <p className="textit" id="textit"></p>
         <Image

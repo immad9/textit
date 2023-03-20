@@ -1,4 +1,4 @@
-import { Component } from "react";
+import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import { auth, db } from "../../firebase/firebase";
 import GoogleSignIn from "./googleSignIn";
@@ -62,15 +62,16 @@ class SigninForm extends Component {
 
     // });
     return (
-      <>
+      <React.Fragment>
         {this.state.forgetFormTrigger === false ? (
           <Form onSubmit={handleLogin}>
             <GoogleSignIn />
             <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label className="poppins300">
+              <Form.Label className="poppins400 formlable">
                 Enter email address
               </Form.Label>
               <Form.Control
+                className="formControl"
                 type="email"
                 placeholder="Enter email"
                 autoComplete="off"
@@ -80,14 +81,12 @@ class SigninForm extends Component {
                   this.setState({ email: e.target.value });
                 }}
               />
-              <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
-              </Form.Text>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label className="poppins300">Password</Form.Label>
+              <Form.Label className="poppins400 formlable">Password</Form.Label>
               <Form.Control
+                className="formControl"
                 type="password"
                 placeholder="Password"
                 value={this.state.password}
@@ -112,17 +111,18 @@ class SigninForm extends Component {
               )}
             </div>
             <Button type="submit" className="signinBtn">
-              <span className="poppins300">Sign in</span>
+              <span className="poppins400">Sign in</span>
             </Button>
           </Form>
         ) : (
           <Form onSubmit={resetPassword}>
             <h4 className="color poppins400">Reset Password</h4>
             <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label className="poppins300">
+              <Form.Label className="poppins400 formlable">
                 Please enter your email address
               </Form.Label>
               <Form.Control
+                className="formControl"
                 type="email"
                 placeholder="Enter email"
                 autoComplete="off"
@@ -150,7 +150,7 @@ class SigninForm extends Component {
             </Form.Group>
           </Form>
         )}
-      </>
+      </React.Fragment>
     );
   }
 }
