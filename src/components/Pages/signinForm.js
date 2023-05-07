@@ -19,57 +19,60 @@ class SigninForm extends Component {
     forgetFormTrigger: false,
     spinner: "none",
     forgetPasswordSend: false,
+    validated: false,
+  };
+  handleLogin = (e) => {
+    e.preventDefault();
+
+    this.setState({ validated: true });
+
+    this.setState({ loginError: false, spinner: "block" });
+    signInWithEmailAndPassword(auth, this.state.email, this.state.password)
+      .then((userCredential) => {
+        // const user = userCredential.user;
+        // window.open("http://localhost:3000/textit", "_self");
+        window.location.href = "http://localhost:3000/textit";
+        this.setState({ spinner: "none" });
+      })
+      .catch((error) => {
+        this.setState({ spinner: "none" });
+        // const errorCode = error.code;
+        // const errorMessage = error.message;
+        // console.log(errorCode);
+        // console.log(errorMessage);
+        this.setState({ loginError: true, email: "", password: "" });
+      });
+  };
+  resetPassword = (e) => {
+    e.preventDefault();
+    this.setState({
+      forgetPasswordError: false,
+      forgetPasswordSend: false,
+      spinner: "block",
+    });
+
+    sendPasswordResetEmail(auth, this.state.email)
+      .then(() => {
+        this.setState({ forgetPasswordSend: true, spinner: "none" });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        this.setState({ spinner: "none", forgetPasswordError: true });
+      });
   };
   render() {
-    const handleLogin = (e) => {
-      e.preventDefault();
-      this.setState({ loginError: false, spinner: "block" });
-      signInWithEmailAndPassword(auth, this.state.email, this.state.password)
-        .then((userCredential) => {
-          // const user = userCredential.user;
-          window.open("http://localhost:3000/textit", "_self");
-          this.setState({ spinner: "none" });
-        })
-        .catch((error) => {
-          this.setState({ spinner: "none" });
-          // const errorCode = error.code;
-          // const errorMessage = error.message;
-          // console.log(errorCode);
-          // console.log(errorMessage);
-          this.setState({ loginError: true, email: "", password: "" });
-        });
-    };
-    const resetPassword = (e) => {
-      e.preventDefault();
-      this.setState({
-        forgetPasswordError: false,
-        forgetPasswordSend: false,
-        spinner: "block",
-      });
-
-      sendPasswordResetEmail(auth, this.state.email)
-        .then(() => {
-          this.setState({ forgetPasswordSend: true, spinner: "none" });
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(errorMessage);
-          this.setState({ spinner: "none", forgetPasswordError: true });
-        });
-    };
-    // onAuthStateChanged(auth, async (user) => {
-
-    // });
     return (
       <React.Fragment>
         {this.state.forgetFormTrigger === false ? (
-          <Form onSubmit={handleLogin}>
+          <Form onSubmit={this.handleLogin}>
             <GoogleSignIn />
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label className="poppins400 formlable">
                 Enter email address
               </Form.Label>
+
               <Form.Control
                 className="formControl"
                 type="email"
@@ -84,8 +87,11 @@ class SigninForm extends Component {
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label className="poppins400 formlable">Password</Form.Label>
+              <Form.Label className="poppins400 formlable">
+                Enter Password
+              </Form.Label>
               <Form.Control
+                required
                 className="formControl"
                 type="password"
                 placeholder="Password"
@@ -115,7 +121,7 @@ class SigninForm extends Component {
             </Button>
           </Form>
         ) : (
-          <Form onSubmit={resetPassword}>
+          <Form onSubmit={this.resetPassword}>
             <h4 className="color poppins400">Reset Password</h4>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label className="poppins400 formlable">

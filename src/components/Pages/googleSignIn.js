@@ -22,7 +22,7 @@ class GoogleSignIn extends Component {
             profilePic: user.photoURL,
             createdAt: new Date(),
           });
-          window.open("/textit", "_self");
+          window.location.href = "http://localhost:3000/textit";
         })
 
         .catch((error) => {

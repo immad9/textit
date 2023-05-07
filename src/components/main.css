@@ -10,42 +10,17 @@
     transform: rotate(360deg);
   }
 }
-.textAmimation {
-  border-right: solid 3px #fff;
-  white-space: nowrap;
-  overflow: hidden;
-  font-family: "Source Code Pro", monospace;
-  font-size: 28px;
-  color: #fff;
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
-/* Animation */
-.textAmimation {
-  animation: animated-text 1.3s steps(10, end) 1s 1 normal both,
-    animated-cursor 600ms steps(10, end) infinite;
-}
-
-/* text animation */
-
-@keyframes animated-text {
-  from {
-    width: 0;
-  }
-  to {
-    width: 140px;
-  }
-}
-
-/* cursor animations */
-
-@keyframes animated-cursor {
-  from {
-    border-right-color: #fff;
-  }
-  to {
-    border-right-color: transparent;
-  }
-}
+/* Firefox */
+/* input[type="number"] {
+  -moz-appearance: textfield;
+} */
 /* <-------------Home page header-------------> */
 .headerbg {
   height: 50vh;
@@ -64,48 +39,16 @@
   justify-content: center;
   align-items: center;
 }
-.headerImageCol {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center;
-}
+
 .headerImage {
-  width: 250px;
-  margin: auto;
-}
-.getStartedBtn {
-  display: flex !important;
-  padding: 0.875em 2em !important;
-  background: linear-gradient(220deg, blue, transparent) #2196f3 !important;
-  color: #fff !important;
-  text-decoration: none !important;
-  transition: background-color 1s !important;
-  place-content: center;
-  border-radius: 30px !important;
   width: 100%;
-  padding-bottom: 10px !important;
-  font-family: poppins !important;
-  font-weight: 600 !important;
-}
-.getStartedBtn:hover {
-  background-color: #e91e63 !important;
+  margin: auto;
 }
 .modal-content {
   border-radius: 20px !important;
   padding: 20px !important;
 }
-.cgClose {
-  font-size: 23px;
-  margin-top: 5px;
-  margin-bottom: 15px;
-  padding: 3px;
-  cursor: pointer !important;
-}
-.cgClose:hover {
-  background-color: #0089ed;
-  color: #ffffff;
-  border-radius: 100px;
-}
+
 .signinBtn {
   width: 100%;
   background-color: #0098ed !important;
@@ -140,7 +83,7 @@
   background-color: #fff;
   position: absolute;
   top: 130px;
-  right: 80px;
+  right: 100px;
   width: 450px;
   padding: 20px;
   box-shadow: 0px 4px 35px rgba(0, 0, 0, 0.08);
@@ -184,7 +127,6 @@
     top: 0px;
     left: 0px;
     width: 100% !important;
-    height: auto;
   }
   .logoStyling {
     padding-left: 30px;
@@ -263,4 +205,81 @@
 .welcomeToP {
   font-size: 21px;
   line-height: 31px;
+}
+/* <--------------SearchBar Component------------------> */
+.searchBarDiv {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 380px;
+  padding: 10px 0;
+  padding-left: 20px;
+  border-right: 1px solid #d9dce0;
+}
+.searchBar {
+  height: 40px !important;
+  border-radius: 22px !important;
+  padding-left: 35px !important;
+  background: url("../assests/images/MagnifyingGlass.png") no-repeat left;
+  background-size: 17px;
+  background-position-x: 10px;
+  margin-left: 10px;
+  width: 276px !important;
+  box-sizing: border-box !important;
+}
+.searchBar::placeholder {
+  padding-left: 45px !important;
+}
+/* <--------------TopBar Component------------------> */
+.topBarMainDiv {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0px 40px;
+  background: #ffffff;
+  border-bottom: 1px solid #d9dce0;
+  height: 60px;
+}
+.topBarIcons {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 25px;
+}
+/* <--------------TopBar Component------------------> */
+.checking {
+  width: 380px;
+  height: 92vh;
+  overflow-y: auto;
+}
+.checking2 {
+  width: 100%;
+  height: 80vh;
+  overflow-y: auto;
+  background-color: #0089ed;
+}
+.checking2::-webkit-scrollbar {
+  display: none;
+}
+.checking::-webkit-scrollbar {
+  width: 1px !important;
+  z-index: 2 !important;
+  margin: auto;
+}
+.checking::-webkit-scrollbar-track {
+  background-color: #d9dce0 !important;
+}
+.checking::-webkit-scrollbar-thumb {
+  background-color: #d9dce0 !important;
+}
+/* .checking::-webkit-scrollbar {
+  display: none;
+} */
+.bgchecking {
+  background: url("https://img.freepik.com/free-photo/blue-smooth-wall-textured-background_53876-106133.jpg?w=996&t=st=1679645977~exp=1679646577~hmac=3fd902c22ace00dbb5dc7f2f72821b54a29293d47435f34ce79e0834b9299e39")
+    no-repeat;
+  background-size: cover;
+  width: 100%;
+  /* height: 100% !important; */
 }

@@ -27,93 +27,86 @@ class SignupForm extends Component {
     resendBtnDisable: true,
     onClickHideverifiMsg: true,
   };
+  // <------------Get data from form and store in firestore auth and firebase database----------->
+  handleSignup = (e) => {
+    this.setState({
+      spinner: "block",
+      loginError: false,
+      verificationsuccess: false,
+    });
+    e.preventDefault();
+    createUserWithEmailAndPassword(auth, this.state.email, this.state.password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        updateProfile(auth.currentUser, {
+          displayName: this.state.userName.toLowerCase(),
+        });
 
+        this.verificationSend();
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorMessage);
+        console.log(errorCode);
+        this.setState({
+          verificationsuccess: false,
+          spinner: "none",
+          email: "",
+          password: "",
+          contact: "",
+          userName: "",
+          loginError: errorCode,
+        });
+      })
+      .then(async () => {
+        await setDoc(doc(db, "users", auth.currentUser.uid), {
+          createdAt: new Date(),
+          name: this.state.userName,
+          email: this.state.email,
+          profilePic:
+            "https://firebasestorage.googleapis.com/v0/b/textit-ee21b.appspot.com/o/DefaultProfilPic.png?alt=media&token=135a91ae-3f7f-4b1a-af39-3ddb92c667e2",
+        });
+      });
+  };
+  // <---------Send verification msg to email------------>
+  verificationSend = () => {
+    this.setState({
+      spinner: "block",
+      resendBtnDisable: true,
+      onClickHideverifiMsg: false,
+    });
+    const actionCodeSettings = {
+      url: "http://localhost:3000/textit",
+      handleCodeInApp: true,
+    };
+    sendEmailVerification(auth.currentUser, actionCodeSettings)
+      .then((data) => {
+        this.setState({
+          spinner: "none",
+          verificationsuccess: true,
+          resendBtnDisable: true,
+          onClickHideverifiMsg: true,
+        });
+        let sec = 60;
+        const timer = setInterval(() => {
+          if (sec > 0) {
+            sec--;
+            document.getElementById("timer").innerHTML = sec;
+          } else if (sec == 0) {
+            document.getElementById("timer").innerHTML = "Send again";
+            this.setState({ resendBtnDisable: false });
+            clearInterval(timer);
+          }
+        }, 1000);
+      })
+      .catch((error) => {
+        alert("someError in verifying email");
+      });
+  };
   render() {
-    // <------------Get data from form and store in firestore auth and firebase database----------->
-    const handleSignup = (e) => {
-      this.setState({
-        spinner: "block",
-        loginError: false,
-        verificationsuccess: false,
-      });
-      e.preventDefault();
-      createUserWithEmailAndPassword(
-        auth,
-        this.state.email,
-        this.state.password
-      )
-        .then((userCredential) => {
-          const user = userCredential.user;
-          updateProfile(auth.currentUser, {
-            displayName: this.state.userName.toLowerCase(),
-          });
-
-          verificationSend();
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(errorMessage);
-          console.log(errorCode);
-          this.setState({
-            verificationsuccess: false,
-            spinner: "none",
-            email: "",
-            password: "",
-            contact: "",
-            userName: "",
-            loginError: errorCode,
-          });
-        })
-        .then(async () => {
-          await setDoc(doc(db, "users", auth.currentUser.uid), {
-            createdAt: new Date(),
-            name: this.state.userName,
-            email: this.state.email,
-            profilePic:
-              "https://firebasestorage.googleapis.com/v0/b/textit-ee21b.appspot.com/o/DefaultProfilPic.png?alt=media&token=135a91ae-3f7f-4b1a-af39-3ddb92c667e2",
-          });
-        });
-    };
-
-    // <---------Send verification msg to email------------>
-    const verificationSend = () => {
-      this.setState({
-        spinner: "block",
-        resendBtnDisable: true,
-        onClickHideverifiMsg: false,
-      });
-      const actionCodeSettings = {
-        url: "http://localhost:3000/textit",
-        handleCodeInApp: true,
-      };
-      sendEmailVerification(auth.currentUser, actionCodeSettings)
-        .then((data) => {
-          this.setState({
-            spinner: "none",
-            verificationsuccess: true,
-            resendBtnDisable: true,
-            onClickHideverifiMsg: true,
-          });
-          let sec = 60;
-          const timer = setInterval(() => {
-            if (sec > 0) {
-              sec--;
-              document.getElementById("timer").innerHTML = sec;
-            } else if (sec == 0) {
-              document.getElementById("timer").innerHTML = "Send again";
-              this.setState({ resendBtnDisable: false });
-              clearInterval(timer);
-            }
-          }, 1000);
-        })
-        .catch((error) => {
-          alert("someError in verifying email");
-        });
-    };
-
     return (
-      <Form onSubmit={handleSignup}>
+      <Form onSubmit={this.handleSignup}>
         <Form.Group className="mb-3 mt-1">
           <Form.Label className="poppins400 formlable">
             Enter email address
@@ -146,7 +139,7 @@ class SignupForm extends Component {
             </Form.Label>
             <Form.Control
               className="formControl"
-              type="text"
+              type="number"
               placeholder="Contact Number"
               required
               value={this.state.contact}
@@ -186,7 +179,7 @@ class SignupForm extends Component {
             <Button
               disabled={this.state.resendBtnDisable}
               className="sendAgainBtn poppins300"
-              onClick={verificationSend}
+              onClick={this.verificationSend}
               id="timer"
             ></Button>
           </div>
